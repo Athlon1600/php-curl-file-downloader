@@ -1,0 +1,19 @@
+{
+    "name": "athlon1600/php-curl-file-downloader",
+    "require": {
+        "athlon1600/php-curl-client": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CurlDownloader\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CurlDownloader\\Tests\\": "tests"
+        }
+    }
+}
