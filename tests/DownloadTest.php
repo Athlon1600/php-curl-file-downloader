@@ -59,4 +59,15 @@ class DownloadTest extends TestCase
 
         unlink('./2020-06-07-Data1KB.dat');
     }
+
+    public function test_download_guess_filename_from_content_type()
+    {
+        $this->client->download("https://www.google.com/", function ($filename) {
+            return './' . $filename;
+        });
+
+        $this->assertTrue(file_exists('./index.html'));
+
+        unlink('./index.html');
+    }
 }

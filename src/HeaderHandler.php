@@ -77,4 +77,10 @@ class HeaderHandler
 
         return null;
     }
+
+    public function getContentType()
+    {
+        $normalized = array_change_key_case($this->headers, CASE_LOWER);
+        return isset($normalized['content-type']) ? $normalized['content-type'] : null;
+    }
 }

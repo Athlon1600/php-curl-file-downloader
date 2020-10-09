@@ -53,6 +53,10 @@ class CurlDownloader
 
             if (empty($filename)) {
                 $filename = $this->getFilenameFromUrl($response->info->url);
+
+                if (empty($filename)) {
+                    $filename = 'index.' . ContentTypes::getExtension($handler->getContentType(), 'html');
+                }
             }
 
             $save_to = call_user_func($destination, $filename);
