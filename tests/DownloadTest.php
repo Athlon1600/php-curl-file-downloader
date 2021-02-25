@@ -70,4 +70,14 @@ class DownloadTest extends TestCase
 
         unlink('./index.html');
     }
+
+    public function test_download_file_no_extension()
+    {
+        $this->client->download("https://cdn.proxynova.com/tests/content_type_text_html", function ($filename) {
+            return './' . $filename;
+        });
+
+        $this->assertTrue(file_exists('./content_type_text_html.html'));
+        @unlink('./content_type_text_html.html');
+    }
 }

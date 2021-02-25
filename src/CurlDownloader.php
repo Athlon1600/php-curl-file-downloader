@@ -22,10 +22,20 @@ class CurlDownloader
         return tempnam(sys_get_temp_dir(), uniqid());
     }
 
+    protected function getPathFromUrl($url)
+    {
+        return parse_url($url, PHP_URL_PATH);
+    }
+
     protected function getFilenameFromUrl($url)
     {
-        $url_path = parse_url($url, PHP_URL_PATH);
-        return basename($url_path);
+        // equivalent to: pathinfo with PATHINFO_FILENAME
+        return basename($this->getPathFromUrl($url));
+    }
+
+    protected function getExtensionFromUrl($url)
+    {
+        return pathinfo($this->getFilenameFromUrl($url), PATHINFO_EXTENSION);
     }
 
     /**
@@ -48,14 +58,27 @@ class CurlDownloader
             CURLOPT_TIMEOUT => $this->max_timeout
         ]);
 
+        // TODO: refactor this whole filename logic into its own class
         if ($response->info->http_code === 200) {
             $filename = $handler->getContentDispositionFilename();
 
             if (empty($filename)) {
-                $filename = $this->getFilenameFromUrl($response->info->url);
+                $url = $response->info->url;
 
+                $filename = $this->getFilenameFromUrl($url);
+
+                $extension_from_url = $this->getExtensionFromUrl($url);
+                $extension_from_content_type = ContentTypes::getExtension($handler->getContentType());
+
+                // E.g: https://www.google.com/
                 if (empty($filename)) {
-                    $filename = 'index.' . ContentTypes::getExtension($handler->getContentType(), 'html');
+                    $filename = 'index.' . ($extension_from_content_type ? $extension_from_content_type : 'html');
+                } else {
+
+                    // in case filename in url is like `videoplayback` with `content-type: video/mp4`
+                    if (empty($extension_from_url) && $extension_from_content_type) {
+                        $filename = ($filename . '.' . $extension_from_content_type);
+                    }
                 }
             }
 
