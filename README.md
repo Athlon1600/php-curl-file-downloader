@@ -28,7 +28,7 @@ It will automatically guess filename of the resource being downloaded (just like
 ## Installation
 
 ```bash
-composer require athlon1600/php-curl-file-downloader
+composer require athlon1600/php-curl-file-downloader "^1.0"
 ```
 
 ### Links
