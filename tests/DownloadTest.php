@@ -11,7 +11,7 @@ class DownloadTest extends TestCase
     /** @var CurlDownloader */
     protected $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = new CurlDownloader(new Client());
     }
