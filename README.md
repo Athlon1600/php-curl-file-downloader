@@ -1,3 +1,6 @@
+![](https://img.shields.io/github/last-commit/Athlon1600/php-curl-file-downloader.svg)
+![Packagist Downloads (custom server)](https://img.shields.io/packagist/dm/Athlon1600/php-curl-file-downloader)
+
 # Download large files using PHP and cURL
 
 There's too many code snippets on the Internet on how to do this, but not enough libraries. 
