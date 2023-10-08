@@ -1,4 +1,4 @@
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Athlon1600/php-curl-file-downloader/ci.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Athlon1600/php-curl-file-downloader/build.yml)
 ![](https://img.shields.io/github/last-commit/Athlon1600/php-curl-file-downloader.svg)
 ![Packagist Downloads (custom server)](https://img.shields.io/packagist/dm/Athlon1600/php-curl-file-downloader)
 
