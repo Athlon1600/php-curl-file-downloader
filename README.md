@@ -1,3 +1,4 @@
+[![Supported PHP Versions](https://img.shields.io/badge/PHP-7.3,%208.0,%208.1,%208.2-blue)](https://github.com/Athlon1600/php-curl-file-downloader)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Athlon1600/php-curl-file-downloader/build.yml)
 ![](https://img.shields.io/github/last-commit/Athlon1600/php-curl-file-downloader.svg)
 ![Packagist Downloads (custom server)](https://img.shields.io/packagist/dm/Athlon1600/php-curl-file-downloader)
