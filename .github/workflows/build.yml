@@ -23,7 +23,12 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        uses: ramsey/composer-install@v2
+        run: composer install --prefer-dist --no-progress
+
+      - name: Static analysis
+        run: |
+          composer require --dev phpstan/phpstan
+          vendor/bin/phpstan analyse src tests
 
       - name: Run test suite
         run: vendor/bin/phpunit tests/
