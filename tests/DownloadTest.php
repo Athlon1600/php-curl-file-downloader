@@ -11,6 +11,7 @@ class DownloadTest extends TestCase
     /** @var CurlDownloader */
     protected $client;
 
+
     protected function setUp(): void
     {
         $this->client = new CurlDownloader(new Client());
@@ -18,13 +19,40 @@ class DownloadTest extends TestCase
 
     public function test_download_directly()
     {
-        $this->client->download("https://demo.borland.com/testsite/downloads/Small.zip", function ($filename) {
+        $this->client->download("https://github.com/Athlon1600/php-curl-file-downloader/archive/refs/heads/master.zip", function ($filename) {
             return './' . $filename;
         });
 
-        $this->assertTrue(file_exists('./Small.zip'));
+        $this->assertFileExists('./php-curl-file-downloader-master.zip');
 
-        unlink('./Small.zip');
+        unlink('./php-curl-file-downloader-master.zip');
+    }
+
+	public function test_download_directly_with_progress_callback()
+    {
+        $callBack = function($resource, $DownloadSize, $Downloaded, $UploadSize, $Uploaded){
+
+            if ($DownloadSize > 0){
+                    $progress = round($Downloaded / $DownloadSize  * 100) . '%';
+                    $GLOBALS['testProgress'] = $progress;
+            }
+		};
+
+        $this->client->download("https://github.com/e107inc/e107/archive/refs/heads/master.zip", function ($filename) {
+            return './' . $filename;
+        }, $callBack );
+
+
+        $this->assertFileExists('./e107-master.zip');
+
+        if(empty($GLOBALS['testProgress']))
+        {
+			$this->fail('Progress not found');
+        }
+
+        $this->assertSame('100%', $GLOBALS['testProgress']);
+
+        unlink('./e107-master.zip');
     }
 
     public function test_download_content_disposition()

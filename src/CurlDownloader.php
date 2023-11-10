@@ -19,7 +19,7 @@ class CurlDownloader
 
     protected function createTempFile()
     {
-        return tempnam(sys_get_temp_dir(), uniqid());
+        return tempnam(sys_get_temp_dir(), uniqid('', true));
     }
 
     protected function getPathFromUrl($url)
@@ -43,7 +43,7 @@ class CurlDownloader
      * @param $destination
      * @return \Curl\Response
      */
-    public function download($url, $destination)
+    public function download($url, $destination, $progressCallback = null)
     {
         $handler = new HeaderHandler();
 
@@ -52,11 +52,26 @@ class CurlDownloader
 
         $handle = fopen($temp_filename, 'w+');
 
-        $response = $this->client->request('GET', $url, [], [], [
+        $options = [
             CURLOPT_FILE => $handle,
             CURLOPT_HEADERFUNCTION => $handler->callback(),
             CURLOPT_TIMEOUT => $this->max_timeout
-        ]);
+	    ];
+
+	    if ($progressCallback) {
+            $options[CURLOPT_NOPROGRESS] = false;
+
+            if(defined('CURLOPT_XFERINFOFUNCTION')) { // PHP 8.2
+                $options[CURLOPT_XFERINFOFUNCTION] = $progressCallback;
+            }
+            else {
+				$options[CURLOPT_PROGRESSFUNCTION] = $progressCallback;
+            }
+	    }
+
+
+
+        $response = $this->client->request('GET', $url, [], [], $options);
 
         // TODO: refactor this whole filename logic into its own class
         if ($response->info->http_code === 200) {
@@ -72,12 +87,12 @@ class CurlDownloader
 
                 // E.g: https://www.google.com/
                 if (empty($filename)) {
-                    $filename = 'index.' . ($extension_from_content_type ? $extension_from_content_type : 'html');
+                    $filename = 'index.' . ($extension_from_content_type ?: 'html');
                 } else {
 
                     // in case filename in url is like `videoplayback` with `content-type: video/mp4`
                     if (empty($extension_from_url) && $extension_from_content_type) {
-                        $filename = ($filename . '.' . $extension_from_content_type);
+                        $filename .= '.' . $extension_from_content_type;
                     }
                 }
             }
