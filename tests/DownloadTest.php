@@ -44,6 +44,12 @@ class DownloadTest extends TestCase
 
 
         $this->assertFileExists('./e107-master.zip');
+
+        if(empty($GLOBALS['testProgress']))
+        {
+			$this->fail('Progress not found');
+        }
+
         $this->assertSame('100%', $GLOBALS['testProgress']);
 
         unlink('./e107-master.zip');

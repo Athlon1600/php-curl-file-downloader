@@ -60,8 +60,16 @@ class CurlDownloader
 
 	    if ($progressCallback) {
             $options[CURLOPT_NOPROGRESS] = false;
-            $options[CURLOPT_PROGRESSFUNCTION] = $progressCallback;
+
+            if(defined('CURLOPT_XFERINFOFUNCTION')) { // PHP 8.2
+                $options[CURLOPT_XFERINFOFUNCTION] = $progressCallback;
+            }
+            else {
+				$options[CURLOPT_PROGRESSFUNCTION] = $progressCallback;
+            }
 	    }
+
+
 
         $response = $this->client->request('GET', $url, [], [], $options);
 
